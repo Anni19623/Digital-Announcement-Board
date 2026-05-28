@@ -1,371 +1,1063 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Create Announcement — Campus Notice Hub</title>
-<link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
-<style>
-  :root{--navy:#0A1628;--blue:#1565C0;--blue-mid:#1976D2;--blue-light:#42A5F5;--cyan:#00BCD4;--cyan-light:#80DEEA;--white:#FFFFFF;--gray-50:#F8FAFC;--gray-100:#EEF2F7;--gray-200:#E2E8F0;--gray-400:#94A3B8;--gray-600:#475569;--gray-800:#1E293B;--sidebar-w:240px;--radius:14px;}
-  *{margin:0;padding:0;box-sizing:border-box;}
-  body{font-family:'DM Sans',sans-serif;background:var(--gray-50);color:var(--gray-800);display:flex;min-height:100vh;}
-  .sidebar{width:var(--sidebar-w);background:var(--navy);display:flex;flex-direction:column;position:fixed;top:0;left:0;height:100vh;z-index:50;}
-  .sidebar-header{padding:20px 20px 16px;border-bottom:1px solid rgba(255,255,255,0.07);}
-  .sidebar-logo{display:flex;align-items:center;gap:10px;}
-  .sidebar-logo-icon{width:36px;height:36px;background:linear-gradient(135deg,var(--cyan),var(--blue-light));border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;}
-  .sidebar-logo-text{font-family:'Sora',sans-serif;font-weight:800;font-size:16px;color:var(--white);}
-  .sidebar-logo-text span{color:var(--cyan);}
-  .sidebar-role{font-size:11px;color:rgba(255,255,255,0.35);margin-top:2px;letter-spacing:0.5px;text-transform:uppercase;}
-  .sidebar-nav{flex:1;padding:16px 12px;display:flex;flex-direction:column;gap:4px;}
-  .nav-item{display:flex;align-items:center;gap:12px;padding:10px 12px;border-radius:10px;color:rgba(255,255,255,0.55);font-size:14px;font-weight:500;cursor:pointer;transition:all 0.2s;text-decoration:none;}
-  .nav-item:hover{background:rgba(255,255,255,0.08);color:var(--white);}
-  .nav-item.active{background:rgba(0,188,212,0.15);color:var(--cyan-light);font-weight:600;}
-  .nav-item .nav-icon{font-size:17px;width:22px;text-align:center;}
-  .sidebar-footer{padding:12px;border-top:1px solid rgba(255,255,255,0.07);}
-  .user-chip{display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:10px;background:rgba(255,255,255,0.05);}
-  .user-avatar{width:32px;height:32px;background:linear-gradient(135deg,var(--cyan),var(--blue-mid));border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:700;color:var(--white);flex-shrink:0;}
-  .user-name{font-size:13px;font-weight:600;color:var(--white);}
-  .user-role{font-size:11px;color:rgba(255,255,255,0.35);}
-  .logout-btn{display:flex;align-items:center;gap:8px;padding:9px 12px;border-radius:10px;color:rgba(255,100,100,0.7);font-size:13px;cursor:pointer;margin-top:8px;background:none;border:none;width:100%;font-family:'DM Sans',sans-serif;transition:all 0.2s;}
-  .logout-btn:hover{background:rgba(255,100,100,0.1);color:#f87171;}
-  .main{margin-left:var(--sidebar-w);flex:1;display:flex;flex-direction:column;}
-  .topbar{background:var(--white);border-bottom:1px solid var(--gray-200);padding:0 28px;height:64px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:40;}
-  .topbar-left{display:flex;align-items:center;gap:12px;}
-  .back-btn{background:var(--gray-100);border:none;border-radius:8px;padding:8px 12px;font-size:13px;cursor:pointer;color:var(--gray-600);display:flex;align-items:center;gap:6px;font-family:'DM Sans',sans-serif;}
-  .back-btn:hover{background:var(--gray-200);}
-  .topbar-title{font-family:'Sora',sans-serif;font-size:20px;font-weight:800;color:var(--navy);}
-  .content{padding:28px;display:grid;grid-template-columns:1fr 400px;gap:24px;align-items:start;}
-  /* FORM */
-  .form-card{background:var(--white);border:1px solid var(--gray-200);border-radius:var(--radius);overflow:hidden;}
-  .fc-header{padding:20px 24px;border-bottom:1px solid var(--gray-100);background:linear-gradient(135deg,#F8FAFC,#EFF6FF);}
-  .fc-header h3{font-family:'Sora',sans-serif;font-size:17px;font-weight:800;color:var(--navy);margin-bottom:3px;}
-  .fc-header p{font-size:13px;color:var(--gray-400);}
-  .form-body{padding:24px;}
-  .form-group{margin-bottom:20px;}
-  .form-group label{display:flex;align-items:center;gap:6px;font-size:12px;font-weight:700;color:var(--gray-600);text-transform:uppercase;letter-spacing:0.8px;margin-bottom:8px;}
-  .required{color:#ef4444;}
-  .form-group input,.form-group select,.form-group textarea{width:100%;padding:12px 14px;border:1.5px solid var(--gray-200);border-radius:10px;font-family:'DM Sans',sans-serif;font-size:15px;color:var(--gray-800);outline:none;transition:all 0.2s;background:var(--white);}
-  .form-group input:focus,.form-group select:focus,.form-group textarea:focus{border-color:var(--cyan);box-shadow:0 0 0 4px rgba(0,188,212,0.08);}
-  .form-group textarea{resize:vertical;min-height:120px;line-height:1.65;}
-  .char-count{text-align:right;font-size:11px;color:var(--gray-400);margin-top:4px;}
-  .two-col{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
-  /* FILE UPLOAD */
-  .upload-area{border:2px dashed var(--gray-200);border-radius:12px;padding:28px;text-align:center;cursor:pointer;transition:all 0.25s;background:var(--gray-50);}
-  .upload-area:hover,.upload-area.drag{border-color:var(--cyan);background:#E0F7FA20;}
-  .upload-icon{font-size:36px;margin-bottom:10px;}
-  .upload-text{font-size:14px;font-weight:600;color:var(--gray-700);margin-bottom:4px;}
-  .upload-hint{font-size:12px;color:var(--gray-400);}
-  .upload-preview{display:none;align-items:center;gap:12px;background:var(--gray-50);border:1px solid var(--gray-200);border-radius:10px;padding:12px 16px;margin-top:10px;}
-  .up-icon{font-size:24px;}
-  .up-info{flex:1;}
-  .up-name{font-size:13px;font-weight:600;color:var(--navy);}
-  .up-size{font-size:11px;color:var(--gray-400);}
-  .up-remove{background:none;border:none;color:var(--gray-400);cursor:pointer;font-size:16px;}
-  /* PRIORITY SELECT */
-  .priority-row{display:flex;gap:10px;}
-  .priority-opt{flex:1;border:2px solid var(--gray-200);border-radius:10px;padding:10px 12px;text-align:center;cursor:pointer;transition:all 0.2s;font-size:13px;font-weight:600;color:var(--gray-600);}
-  .priority-opt.selected.low{border-color:#22C55E;background:#F0FDF4;color:#15803D;}
-  .priority-opt.selected.medium{border-color:#F59E0B;background:#FFFBEB;color:#B45309;}
-  .priority-opt.selected.high{border-color:#EF4444;background:#FEF2F2;color:#B91C1C;}
-  /* PUBLISH OPTIONS */
-  .publish-opts{display:flex;flex-direction:column;gap:10px;}
-  .pub-opt{display:flex;align-items:center;gap:12px;padding:12px 14px;border:1.5px solid var(--gray-200);border-radius:10px;cursor:pointer;transition:all 0.2s;}
-  .pub-opt:hover{border-color:var(--cyan);}
-  .pub-opt input[type=radio]{accent-color:var(--cyan);width:15px;height:15px;}
-  .pub-opt-text strong{display:block;font-size:14px;font-weight:600;color:var(--navy);}
-  .pub-opt-text span{font-size:12px;color:var(--gray-400);}
-  /* FORM ACTIONS */
-  .form-actions{display:flex;gap:12px;padding-top:4px;}
-  .btn-draft{flex:1;padding:12px;border:2px solid var(--gray-200);border-radius:10px;background:none;font-family:'Sora',sans-serif;font-size:14px;font-weight:700;color:var(--gray-600);cursor:pointer;transition:all 0.2s;}
-  .btn-draft:hover{border-color:var(--gray-400);color:var(--navy);}
-  .btn-publish{flex:2;padding:12px;background:linear-gradient(135deg,var(--cyan),var(--blue-mid));border:none;border-radius:10px;color:var(--white);font-family:'Sora',sans-serif;font-size:14px;font-weight:800;cursor:pointer;transition:all 0.25s;}
-  .btn-publish:hover{transform:translateY(-2px);box-shadow:0 6px 20px rgba(0,188,212,0.3);}
-  /* PREVIEW */
-  .preview-card{background:var(--white);border:1px solid var(--gray-200);border-radius:var(--radius);position:sticky;top:88px;}
-  .preview-header{padding:16px 20px;border-bottom:1px solid var(--gray-100);display:flex;align-items:center;justify-content:space-between;}
-  .preview-header h3{font-family:'Sora',sans-serif;font-size:15px;font-weight:800;color:var(--navy);}
-  .preview-badge{font-size:11px;font-weight:700;padding:4px 10px;border-radius:20px;background:var(--gray-100);color:var(--gray-600);letter-spacing:0.5px;text-transform:uppercase;}
-  .preview-body{padding:20px;}
-  .pv-card{border:1.5px solid var(--gray-200);border-radius:14px;overflow:hidden;}
-  .pv-bar{height:4px;background:linear-gradient(90deg,var(--blue),var(--cyan));}
-  .pv-content{padding:16px;}
-  .pv-tag{display:inline-block;padding:4px 12px;border-radius:20px;font-size:11px;font-weight:700;text-transform:uppercase;margin-bottom:10px;}
-  .pv-title{font-family:'Sora',sans-serif;font-size:15px;font-weight:800;color:var(--navy);line-height:1.4;margin-bottom:8px;min-height:22px;}
-  .pv-desc{font-size:13px;color:var(--gray-600);line-height:1.65;min-height:40px;margin-bottom:12px;}
-  .pv-footer{display:flex;justify-content:space-between;align-items:center;padding-top:10px;border-top:1px solid var(--gray-100);}
-  .pv-meta{font-size:11px;color:var(--gray-400);}
-  .preview-tip{margin-top:16px;background:var(--gray-50);border-radius:10px;padding:12px 14px;font-size:12px;color:var(--gray-500);line-height:1.6;}
-  /* TOAST */
-  .toast{position:fixed;bottom:24px;right:24px;background:var(--navy);color:var(--white);padding:14px 22px;border-radius:12px;font-size:14px;font-weight:500;border-left:4px solid var(--cyan);box-shadow:0 8px 32px rgba(0,0,0,0.3);transform:translateY(80px);opacity:0;transition:all 0.4s;z-index:999;}
-  .toast.show{transform:translateY(0);opacity:1;}
-  @media(max-width:1100px){.content{grid-template-columns:1fr;}.preview-card{position:static;}}
-  @media(max-width:768px){.sidebar{transform:translateX(-100%);}.main{margin-left:0;}}
-</style>
-</head>
-<body>
-
-<aside class="sidebar">
-  <div class="sidebar-header">
-    <div class="sidebar-logo">
-      <div class="sidebar-logo-icon">📋</div>
-      <div>
-        <div class="sidebar-logo-text">Campus<span>Hub</span></div>
-        <div class="sidebar-role">Admin Panel</div>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Create Announcement — Campus Notice Hub</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        --navy: #0a1628;
+        --blue: #1565c0;
+        --blue-mid: #1976d2;
+        --blue-light: #42a5f5;
+        --cyan: #00bcd4;
+        --cyan-light: #80deea;
+        --white: #ffffff;
+        --gray-50: #f8fafc;
+        --gray-100: #eef2f7;
+        --gray-200: #e2e8f0;
+        --gray-400: #94a3b8;
+        --gray-600: #475569;
+        --gray-800: #1e293b;
+        --sidebar-w: 240px;
+        --radius: 14px;
+      }
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      body {
+        font-family: "DM Sans", sans-serif;
+        background: var(--gray-50);
+        color: var(--gray-800);
+        display: flex;
+        min-height: 100vh;
+      }
+      .sidebar {
+        width: var(--sidebar-w);
+        background: var(--navy);
+        display: flex;
+        flex-direction: column;
+        position: fixed;
+        top: 0;
+        left: 0;
+        height: 100vh;
+        z-index: 50;
+      }
+      .sidebar-header {
+        padding: 20px 20px 16px;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+      }
+      .sidebar-logo {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+      .sidebar-logo-icon {
+        width: 36px;
+        height: 36px;
+        background: linear-gradient(135deg, var(--cyan), var(--blue-light));
+        border-radius: 10px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 18px;
+        flex-shrink: 0;
+      }
+      .sidebar-logo-text {
+        font-family: "Sora", sans-serif;
+        font-weight: 800;
+        font-size: 16px;
+        color: var(--white);
+      }
+      .sidebar-logo-text span {
+        color: var(--cyan);
+      }
+      .sidebar-role {
+        font-size: 11px;
+        color: rgba(255, 255, 255, 0.35);
+        margin-top: 2px;
+        letter-spacing: 0.5px;
+        text-transform: uppercase;
+      }
+      .sidebar-nav {
+        flex: 1;
+        padding: 16px 12px;
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+      }
+      .nav-item {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 10px 12px;
+        border-radius: 10px;
+        color: rgba(255, 255, 255, 0.55);
+        font-size: 14px;
+        font-weight: 500;
+        cursor: pointer;
+        transition: all 0.2s;
+        text-decoration: none;
+      }
+      .nav-item:hover {
+        background: rgba(255, 255, 255, 0.08);
+        color: var(--white);
+      }
+      .nav-item.active {
+        background: rgba(0, 188, 212, 0.15);
+        color: var(--cyan-light);
+        font-weight: 600;
+      }
+      .nav-item .nav-icon {
+        font-size: 17px;
+        width: 22px;
+        text-align: center;
+      }
+      .sidebar-footer {
+        padding: 12px;
+        border-top: 1px solid rgba(255, 255, 255, 0.07);
+      }
+      .user-chip {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        padding: 10px 12px;
+        border-radius: 10px;
+        background: rgba(255, 255, 255, 0.05);
+      }
+      .user-avatar {
+        width: 32px;
+        height: 32px;
+        background: linear-gradient(135deg, var(--cyan), var(--blue-mid));
+        border-radius: 8px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 14px;
+        font-weight: 700;
+        color: var(--white);
+        flex-shrink: 0;
+      }
+      .user-name {
+        font-size: 13px;
+        font-weight: 600;
+        color: var(--white);
+      }
+      .user-role {
+        font-size: 11px;
+        color: rgba(255, 255, 255, 0.35);
+      }
+      .logout-btn {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        padding: 9px 12px;
+        border-radius: 10px;
+        color: rgba(255, 100, 100, 0.7);
+        font-size: 13px;
+        cursor: pointer;
+        margin-top: 8px;
+        background: none;
+        border: none;
+        width: 100%;
+        font-family: "DM Sans", sans-serif;
+        transition: all 0.2s;
+      }
+      .logout-btn:hover {
+        background: rgba(255, 100, 100, 0.1);
+        color: #f87171;
+      }
+      .main {
+        margin-left: var(--sidebar-w);
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+      }
+      .topbar {
+        background: var(--white);
+        border-bottom: 1px solid var(--gray-200);
+        padding: 0 28px;
+        height: 64px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        position: sticky;
+        top: 0;
+        z-index: 40;
+      }
+      .topbar-left {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+      }
+      .back-btn {
+        background: var(--gray-100);
+        border: none;
+        border-radius: 8px;
+        padding: 8px 12px;
+        font-size: 13px;
+        cursor: pointer;
+        color: var(--gray-600);
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        font-family: "DM Sans", sans-serif;
+      }
+      .back-btn:hover {
+        background: var(--gray-200);
+      }
+      .topbar-title {
+        font-family: "Sora", sans-serif;
+        font-size: 20px;
+        font-weight: 800;
+        color: var(--navy);
+      }
+      .content {
+        padding: 28px;
+        display: grid;
+        grid-template-columns: 1fr 400px;
+        gap: 24px;
+        align-items: start;
+      }
+      /* FORM */
+      .form-card {
+        background: var(--white);
+        border: 1px solid var(--gray-200);
+        border-radius: var(--radius);
+        overflow: hidden;
+      }
+      .fc-header {
+        padding: 20px 24px;
+        border-bottom: 1px solid var(--gray-100);
+        background: linear-gradient(135deg, #f8fafc, #eff6ff);
+      }
+      .fc-header h3 {
+        font-family: "Sora", sans-serif;
+        font-size: 17px;
+        font-weight: 800;
+        color: var(--navy);
+        margin-bottom: 3px;
+      }
+      .fc-header p {
+        font-size: 13px;
+        color: var(--gray-400);
+      }
+      .form-body {
+        padding: 24px;
+      }
+      .form-group {
+        margin-bottom: 20px;
+      }
+      .form-group label {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        font-size: 12px;
+        font-weight: 700;
+        color: var(--gray-600);
+        text-transform: uppercase;
+        letter-spacing: 0.8px;
+        margin-bottom: 8px;
+      }
+      .required {
+        color: #ef4444;
+      }
+      .form-group input,
+      .form-group select,
+      .form-group textarea {
+        width: 100%;
+        padding: 12px 14px;
+        border: 1.5px solid var(--gray-200);
+        border-radius: 10px;
+        font-family: "DM Sans", sans-serif;
+        font-size: 15px;
+        color: var(--gray-800);
+        outline: none;
+        transition: all 0.2s;
+        background: var(--white);
+      }
+      .form-group input:focus,
+      .form-group select:focus,
+      .form-group textarea:focus {
+        border-color: var(--cyan);
+        box-shadow: 0 0 0 4px rgba(0, 188, 212, 0.08);
+      }
+      .form-group textarea {
+        resize: vertical;
+        min-height: 120px;
+        line-height: 1.65;
+      }
+      .char-count {
+        text-align: right;
+        font-size: 11px;
+        color: var(--gray-400);
+        margin-top: 4px;
+      }
+      .two-col {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 16px;
+      }
+      /* FILE UPLOAD */
+      .upload-area {
+        border: 2px dashed var(--gray-200);
+        border-radius: 12px;
+        padding: 28px;
+        text-align: center;
+        cursor: pointer;
+        transition: all 0.25s;
+        background: var(--gray-50);
+      }
+      .upload-area:hover,
+      .upload-area.drag {
+        border-color: var(--cyan);
+        background: #e0f7fa20;
+      }
+      .upload-icon {
+        font-size: 36px;
+        margin-bottom: 10px;
+      }
+      .upload-text {
+        font-size: 14px;
+        font-weight: 600;
+        color: var(--gray-700);
+        margin-bottom: 4px;
+      }
+      .upload-hint {
+        font-size: 12px;
+        color: var(--gray-400);
+      }
+      .upload-preview {
+        display: none;
+        align-items: center;
+        gap: 12px;
+        background: var(--gray-50);
+        border: 1px solid var(--gray-200);
+        border-radius: 10px;
+        padding: 12px 16px;
+        margin-top: 10px;
+      }
+      .up-icon {
+        font-size: 24px;
+      }
+      .up-info {
+        flex: 1;
+      }
+      .up-name {
+        font-size: 13px;
+        font-weight: 600;
+        color: var(--navy);
+      }
+      .up-size {
+        font-size: 11px;
+        color: var(--gray-400);
+      }
+      .up-remove {
+        background: none;
+        border: none;
+        color: var(--gray-400);
+        cursor: pointer;
+        font-size: 16px;
+      }
+      /* PRIORITY SELECT */
+      .priority-row {
+        display: flex;
+        gap: 10px;
+      }
+      .priority-opt {
+        flex: 1;
+        border: 2px solid var(--gray-200);
+        border-radius: 10px;
+        padding: 10px 12px;
+        text-align: center;
+        cursor: pointer;
+        transition: all 0.2s;
+        font-size: 13px;
+        font-weight: 600;
+        color: var(--gray-600);
+      }
+      .priority-opt.selected.low {
+        border-color: #22c55e;
+        background: #f0fdf4;
+        color: #15803d;
+      }
+      .priority-opt.selected.medium {
+        border-color: #f59e0b;
+        background: #fffbeb;
+        color: #b45309;
+      }
+      .priority-opt.selected.high {
+        border-color: #ef4444;
+        background: #fef2f2;
+        color: #b91c1c;
+      }
+      /* PUBLISH OPTIONS */
+      .publish-opts {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+      }
+      .pub-opt {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 12px 14px;
+        border: 1.5px solid var(--gray-200);
+        border-radius: 10px;
+        cursor: pointer;
+        transition: all 0.2s;
+      }
+      .pub-opt:hover {
+        border-color: var(--cyan);
+      }
+      .pub-opt input[type="radio"] {
+        accent-color: var(--cyan);
+        width: 15px;
+        height: 15px;
+      }
+      .pub-opt-text strong {
+        display: block;
+        font-size: 14px;
+        font-weight: 600;
+        color: var(--navy);
+      }
+      .pub-opt-text span {
+        font-size: 12px;
+        color: var(--gray-400);
+      }
+      /* FORM ACTIONS */
+      .form-actions {
+        display: flex;
+        gap: 12px;
+        padding-top: 4px;
+      }
+      .btn-draft {
+        flex: 1;
+        padding: 12px;
+        border: 2px solid var(--gray-200);
+        border-radius: 10px;
+        background: none;
+        font-family: "Sora", sans-serif;
+        font-size: 14px;
+        font-weight: 700;
+        color: var(--gray-600);
+        cursor: pointer;
+        transition: all 0.2s;
+      }
+      .btn-draft:hover {
+        border-color: var(--gray-400);
+        color: var(--navy);
+      }
+      .btn-publish {
+        flex: 2;
+        padding: 12px;
+        background: linear-gradient(135deg, var(--cyan), var(--blue-mid));
+        border: none;
+        border-radius: 10px;
+        color: var(--white);
+        font-family: "Sora", sans-serif;
+        font-size: 14px;
+        font-weight: 800;
+        cursor: pointer;
+        transition: all 0.25s;
+      }
+      .btn-publish:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(0, 188, 212, 0.3);
+      }
+      /* PREVIEW */
+      .preview-card {
+        background: var(--white);
+        border: 1px solid var(--gray-200);
+        border-radius: var(--radius);
+        position: sticky;
+        top: 88px;
+      }
+      .preview-header {
+        padding: 16px 20px;
+        border-bottom: 1px solid var(--gray-100);
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+      }
+      .preview-header h3 {
+        font-family: "Sora", sans-serif;
+        font-size: 15px;
+        font-weight: 800;
+        color: var(--navy);
+      }
+      .preview-badge {
+        font-size: 11px;
+        font-weight: 700;
+        padding: 4px 10px;
+        border-radius: 20px;
+        background: var(--gray-100);
+        color: var(--gray-600);
+        letter-spacing: 0.5px;
+        text-transform: uppercase;
+      }
+      .preview-body {
+        padding: 20px;
+      }
+      .pv-card {
+        border: 1.5px solid var(--gray-200);
+        border-radius: 14px;
+        overflow: hidden;
+      }
+      .pv-bar {
+        height: 4px;
+        background: linear-gradient(90deg, var(--blue), var(--cyan));
+      }
+      .pv-content {
+        padding: 16px;
+      }
+      .pv-tag {
+        display: inline-block;
+        padding: 4px 12px;
+        border-radius: 20px;
+        font-size: 11px;
+        font-weight: 700;
+        text-transform: uppercase;
+        margin-bottom: 10px;
+      }
+      .pv-title {
+        font-family: "Sora", sans-serif;
+        font-size: 15px;
+        font-weight: 800;
+        color: var(--navy);
+        line-height: 1.4;
+        margin-bottom: 8px;
+        min-height: 22px;
+      }
+      .pv-desc {
+        font-size: 13px;
+        color: var(--gray-600);
+        line-height: 1.65;
+        min-height: 40px;
+        margin-bottom: 12px;
+      }
+      .pv-footer {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding-top: 10px;
+        border-top: 1px solid var(--gray-100);
+      }
+      .pv-meta {
+        font-size: 11px;
+        color: var(--gray-400);
+      }
+      .preview-tip {
+        margin-top: 16px;
+        background: var(--gray-50);
+        border-radius: 10px;
+        padding: 12px 14px;
+        font-size: 12px;
+        color: var(--gray-500);
+        line-height: 1.6;
+      }
+      /* TOAST */
+      .toast {
+        position: fixed;
+        bottom: 24px;
+        right: 24px;
+        background: var(--navy);
+        color: var(--white);
+        padding: 14px 22px;
+        border-radius: 12px;
+        font-size: 14px;
+        font-weight: 500;
+        border-left: 4px solid var(--cyan);
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+        transform: translateY(80px);
+        opacity: 0;
+        transition: all 0.4s;
+        z-index: 999;
+      }
+      .toast.show {
+        transform: translateY(0);
+        opacity: 1;
+      }
+      @media (max-width: 1100px) {
+        .content {
+          grid-template-columns: 1fr;
+        }
+        .preview-card {
+          position: static;
+        }
+      }
+      @media (max-width: 768px) {
+        .sidebar {
+          transform: translateX(-100%);
+        }
+        .main {
+          margin-left: 0;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <div class="sidebar-logo">
+          <div class="sidebar-logo-icon">📋</div>
+          <div>
+            <div class="sidebar-logo-text">Campus<span>Hub</span></div>
+            <div class="sidebar-role">Admin Panel</div>
+          </div>
+        </div>
       </div>
-    </div>
-  </div>
-  <nav class="sidebar-nav">
-    <a href="admin-dashboard.html" class="nav-item"><span class="nav-icon">🏠</span> Dashboard</a>
-    <a href="create-announcement.html" class="nav-item active"><span class="nav-icon">✏️</span> Create Notice</a>
-    <a href="noticeboard.html" class="nav-item"><span class="nav-icon">📋</span> View Noticeboard</a>
-    <div style="height:1px;background:rgba(255,255,255,0.07);margin:8px 0;"></div>
-    <a href="#" class="nav-item"><span class="nav-icon">📊</span> Analytics</a>
-    <a href="#" class="nav-item"><span class="nav-icon">👥</span> Manage Users</a>
-    <a href="#" class="nav-item"><span class="nav-icon">⚙️</span> Settings</a>
-  </nav>
-  <div class="sidebar-footer">
-    <div class="user-chip">
-      <div class="user-avatar">A</div>
-      <div><div class="user-name">Admin</div><div class="user-role">Super Admin</div></div>
-    </div>
-    <button class="logout-btn" onclick="window.location.href='admin-login.html'">🚪 Logout</button>
-  </div>
-</aside>
-
-<div class="main">
-  <div class="topbar">
-    <div class="topbar-left">
-      <button class="back-btn" onclick="window.location.href='admin-dashboard.html'">← Back</button>
-      <div class="topbar-title">Create Announcement</div>
-    </div>
-  </div>
-
-  <div class="content">
-    <!-- FORM -->
-    <div class="form-card">
-      <div class="fc-header">
-        <h3>✏️ New Announcement</h3>
-        <p>Fill in the details below to publish a new notice to the campus noticeboard.</p>
+      <nav class="sidebar-nav">
+        <a href="admin-dashboard.html" class="nav-item"
+          ><span class="nav-icon">🏠</span> Dashboard</a
+        >
+        <a href="create-announcement.html" class="nav-item active"
+          ><span class="nav-icon">✏️</span> Create Notice</a
+        >
+        <a href="noticeboard.html" class="nav-item"
+          ><span class="nav-icon">📋</span> View Noticeboard</a
+        >
+        <div
+          style="
+            height: 1px;
+            background: rgba(255, 255, 255, 0.07);
+            margin: 8px 0;
+          "
+        ></div>
+        <a href="#" class="nav-item"
+          ><span class="nav-icon">📊</span> Analytics</a
+        >
+        <a href="#" class="nav-item"
+          ><span class="nav-icon">👥</span> Manage Users</a
+        >
+        <a href="#" class="nav-item"
+          ><span class="nav-icon">⚙️</span> Settings</a
+        >
+      </nav>
+      <div class="sidebar-footer">
+        <div class="user-chip">
+          <div class="user-avatar">A</div>
+          <div>
+            <div class="user-name">Admin</div>
+            <div class="user-role">Super Admin</div>
+          </div>
+        </div>
+        <button
+          class="logout-btn"
+          onclick="window.location.href = 'admin-login.html'"
+        >
+          🚪 Logout
+        </button>
       </div>
-      <div class="form-body">
-        <!-- Title -->
-        <div class="form-group">
-          <label>Notice Title <span class="required">*</span></label>
-          <input type="text" id="fTitle" placeholder="Enter a clear, descriptive title…" maxlength="120" oninput="updatePreview()">
-          <div class="char-count" id="titleCount">0 / 120</div>
-        </div>
-        <!-- Category & Priority -->
-        <div class="two-col">
-          <div class="form-group">
-            <label>Category <span class="required">*</span></label>
-            <select id="fCat" onchange="updatePreview()">
-              <option value="">— Select Category —</option>
-              <option value="Exams">📝 Exams</option>
-              <option value="Events">🎉 Events</option>
-              <option value="Placements">💼 Placements</option>
-              <option value="Clubs">🎭 Clubs</option>
-              <option value="General">📢 General</option>
-            </select>
-          </div>
-          <div class="form-group">
-            <label>Publish Date <span class="required">*</span></label>
-            <input type="date" id="fDate" oninput="updatePreview()">
-          </div>
-        </div>
-        <!-- Author -->
-        <div class="form-group">
-          <label>Author / Department</label>
-          <input type="text" id="fAuthor" placeholder="e.g. Academic Affairs, T&P Cell…" oninput="updatePreview()">
-        </div>
-        <!-- Description -->
-        <div class="form-group">
-          <label>Full Description <span class="required">*</span></label>
-          <textarea id="fDesc" placeholder="Write a complete description of the announcement. Include all relevant details like dates, eligibility, and action items." maxlength="1000" oninput="updatePreview(); updateDescCount()"></textarea>
-          <div class="char-count" id="descCount">0 / 1000</div>
-        </div>
-        <!-- Priority -->
-        <div class="form-group">
-          <label>Priority Level</label>
-          <div class="priority-row">
-            <div class="priority-opt low" onclick="setPriority('low',this)">🟢 Low</div>
-            <div class="priority-opt medium selected" onclick="setPriority('medium',this)">🟡 Medium</div>
-            <div class="priority-opt high" onclick="setPriority('high',this)">🔴 High</div>
-          </div>
-        </div>
-        <!-- Tags -->
-        <div class="form-group">
-          <label>Tags (comma separated)</label>
-          <input type="text" id="fTags" placeholder="e.g. exam, timetable, CSE, all branches">
-        </div>
-        <!-- File Upload -->
-        <div class="form-group">
-          <label>Attach File (PDF / Image)</label>
-          <div class="upload-area" id="uploadArea" onclick="document.getElementById('fileInput').click()" ondragover="dragOver(event)" ondragleave="dragLeave(event)" ondrop="dropFile(event)">
-            <div class="upload-icon">📎</div>
-            <div class="upload-text">Click to upload or drag & drop</div>
-            <div class="upload-hint">PDF, JPG, PNG up to 10 MB</div>
-          </div>
-          <input type="file" id="fileInput" style="display:none" accept=".pdf,.jpg,.jpeg,.png" onchange="handleFile(this)">
-          <div class="upload-preview" id="uploadPreview">
-            <div class="up-icon" id="upIcon">📄</div>
-            <div class="up-info"><div class="up-name" id="upName"></div><div class="up-size" id="upSize"></div></div>
-            <button class="up-remove" onclick="removeFile()">✕</button>
-          </div>
-        </div>
-        <!-- Publish Options -->
-        <div class="form-group">
-          <label>Publish Status</label>
-          <div class="publish-opts">
-            <label class="pub-opt">
-              <input type="radio" name="pubStatus" value="published" checked>
-              <div class="pub-opt-text"><strong>🟢 Publish Now</strong><span>Immediately visible to all students on the noticeboard.</span></div>
-            </label>
-            <label class="pub-opt">
-              <input type="radio" name="pubStatus" value="draft">
-              <div class="pub-opt-text"><strong>📝 Save as Draft</strong><span>Save privately — publish later when ready.</span></div>
-            </label>
-            <label class="pub-opt">
-              <input type="radio" name="pubStatus" value="scheduled">
-              <div class="pub-opt-text"><strong>⏰ Schedule</strong><span>Auto-publish at the selected date & time.</span></div>
-            </label>
-          </div>
-        </div>
-        <div class="form-actions">
-          <button class="btn-draft" onclick="saveDraft()">Save Draft</button>
-          <button class="btn-publish" onclick="publishNotice()">🚀 Publish Announcement</button>
+    </aside>
+
+    <div class="main">
+      <div class="topbar">
+        <div class="topbar-left">
+          <button
+            class="back-btn"
+            onclick="window.location.href = 'admin-dashboard.html'"
+          >
+            ← Back
+          </button>
+          <div class="topbar-title">Create Announcement</div>
         </div>
       </div>
-    </div>
 
-    <!-- PREVIEW -->
-    <div class="preview-card">
-      <div class="preview-header">
-        <h3>👁️ Live Preview</h3>
-        <span class="preview-badge">Card View</span>
-      </div>
-      <div class="preview-body">
-        <div class="pv-card">
-          <div class="pv-bar"></div>
-          <div class="pv-content">
-            <div class="pv-tag tag-general" id="pvTag">📢 General</div>
-            <div class="pv-title" id="pvTitle">Your notice title will appear here…</div>
-            <div class="pv-desc" id="pvDesc">Description preview will update as you type…</div>
-            <div class="pv-footer">
-              <span class="pv-meta" id="pvMeta">👤 Author · 📅 Date</span>
-              <span style="font-size:12px;font-weight:700;color:var(--blue-mid);">Read more →</span>
+      <div class="content">
+        <!-- FORM -->
+        <div class="form-card">
+          <div class="fc-header">
+            <h3>✏️ New Announcement</h3>
+            <p>
+              Fill in the details below to publish a new notice to the campus
+              noticeboard.
+            </p>
+          </div>
+          <div class="form-body">
+            <!-- Title -->
+            <div class="form-group">
+              <label>Notice Title <span class="required">*</span></label>
+              <input
+                type="text"
+                id="fTitle"
+                placeholder="Enter a clear, descriptive title…"
+                maxlength="120"
+                oninput="updatePreview()"
+              />
+              <div class="char-count" id="titleCount">0 / 120</div>
+            </div>
+            <!-- Category & Priority -->
+            <div class="two-col">
+              <div class="form-group">
+                <label>Category <span class="required">*</span></label>
+                <select id="fCat" onchange="updatePreview()">
+                  <option value="">— Select Category —</option>
+                  <option value="Exams">📝 Exams</option>
+                  <option value="Events">🎉 Events</option>
+                  <option value="Placements">💼 Placements</option>
+                  <option value="Clubs">🎭 Clubs</option>
+                  <option value="General">📢 General</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label>Publish Date <span class="required">*</span></label>
+                <input type="date" id="fDate" oninput="updatePreview()" />
+              </div>
+            </div>
+            <!-- Author -->
+            <div class="form-group">
+              <label>Author / Department</label>
+              <input
+                type="text"
+                id="fAuthor"
+                placeholder="e.g. Academic Affairs, T&P Cell…"
+                oninput="updatePreview()"
+              />
+            </div>
+            <!-- Description -->
+            <div class="form-group">
+              <label>Full Description <span class="required">*</span></label>
+              <textarea
+                id="fDesc"
+                placeholder="Write a complete description of the announcement. Include all relevant details like dates, eligibility, and action items."
+                maxlength="1000"
+                oninput="
+                  updatePreview();
+                  updateDescCount();
+                "
+              ></textarea>
+              <div class="char-count" id="descCount">0 / 1000</div>
+            </div>
+            <!-- Priority -->
+            <div class="form-group">
+              <label>Priority Level</label>
+              <div class="priority-row">
+                <div
+                  class="priority-opt low"
+                  onclick="setPriority('low', this)"
+                >
+                  🟢 Low
+                </div>
+                <div
+                  class="priority-opt medium selected"
+                  onclick="setPriority('medium', this)"
+                >
+                  🟡 Medium
+                </div>
+                <div
+                  class="priority-opt high"
+                  onclick="setPriority('high', this)"
+                >
+                  🔴 High
+                </div>
+              </div>
+            </div>
+            <!-- Tags -->
+            <div class="form-group">
+              <label>Tags (comma separated)</label>
+              <input
+                type="text"
+                id="fTags"
+                placeholder="e.g. exam, timetable, CSE, all branches"
+              />
+            </div>
+            <!-- File Upload -->
+            <div class="form-group">
+              <label>Attach File (PDF / Image)</label>
+              <div
+                class="upload-area"
+                id="uploadArea"
+                onclick="document.getElementById('fileInput').click()"
+                ondragover="dragOver(event)"
+                ondragleave="dragLeave(event)"
+                ondrop="dropFile(event)"
+              >
+                <div class="upload-icon">📎</div>
+                <div class="upload-text">Click to upload or drag & drop</div>
+                <div class="upload-hint">PDF, JPG, PNG up to 10 MB</div>
+              </div>
+              <input
+                type="file"
+                id="fileInput"
+                style="display: none"
+                accept=".pdf,.jpg,.jpeg,.png"
+                onchange="handleFile(this)"
+              />
+              <div class="upload-preview" id="uploadPreview">
+                <div class="up-icon" id="upIcon">📄</div>
+                <div class="up-info">
+                  <div class="up-name" id="upName"></div>
+                  <div class="up-size" id="upSize"></div>
+                </div>
+                <button class="up-remove" onclick="removeFile()">✕</button>
+              </div>
+            </div>
+            <!-- Publish Options -->
+            <div class="form-group">
+              <label>Publish Status</label>
+              <div class="publish-opts">
+                <label class="pub-opt">
+                  <input
+                    type="radio"
+                    name="pubStatus"
+                    value="published"
+                    checked
+                  />
+                  <div class="pub-opt-text">
+                    <strong>🟢 Publish Now</strong
+                    ><span
+                      >Immediately visible to all students on the
+                      noticeboard.</span
+                    >
+                  </div>
+                </label>
+                <label class="pub-opt">
+                  <input type="radio" name="pubStatus" value="draft" />
+                  <div class="pub-opt-text">
+                    <strong>📝 Save as Draft</strong
+                    ><span>Save privately — publish later when ready.</span>
+                  </div>
+                </label>
+                <label class="pub-opt">
+                  <input type="radio" name="pubStatus" value="scheduled" />
+                  <div class="pub-opt-text">
+                    <strong>⏰ Schedule</strong
+                    ><span>Auto-publish at the selected date & time.</span>
+                  </div>
+                </label>
+              </div>
+            </div>
+            <div class="form-actions">
+              <button class="btn-draft" onclick="saveDraft()">
+                Save Draft
+              </button>
+              <button class="btn-publish" onclick="publishNotice()">
+                🚀 Publish Announcement
+              </button>
             </div>
           </div>
         </div>
-        <div class="preview-tip">💡 This is how your notice will appear on the student noticeboard. Fill in the form fields to see it update in real-time.</div>
+
+        <!-- PREVIEW -->
+        <div class="preview-card">
+          <div class="preview-header">
+            <h3>👁️ Live Preview</h3>
+            <span class="preview-badge">Card View</span>
+          </div>
+          <div class="preview-body">
+            <div class="pv-card">
+              <div class="pv-bar"></div>
+              <div class="pv-content">
+                <div class="pv-tag tag-general" id="pvTag">📢 General</div>
+                <div class="pv-title" id="pvTitle">
+                  Your notice title will appear here…
+                </div>
+                <div class="pv-desc" id="pvDesc">
+                  Description preview will update as you type…
+                </div>
+                <div class="pv-footer">
+                  <span class="pv-meta" id="pvMeta">👤 Author · 📅 Date</span>
+                  <span
+                    style="
+                      font-size: 12px;
+                      font-weight: 700;
+                      color: var(--blue-mid);
+                    "
+                    >Read more →</span
+                  >
+                </div>
+              </div>
+            </div>
+            <div class="preview-tip">
+              💡 This is how your notice will appear on the student noticeboard.
+              Fill in the form fields to see it update in real-time.
+            </div>
+          </div>
+        </div>
       </div>
     </div>
-  </div>
-</div>
 
-<div class="toast" id="toast"></div>
+    <div class="toast" id="toast"></div>
 
-<script>
-// Set today's date as default
-document.getElementById('fDate').value = new Date().toISOString().split('T')[0];
+    <script>
+      // Set today's date as default
+      document.getElementById("fDate").value = new Date()
+        .toISOString()
+        .split("T")[0];
 
-const tagMap = {Exams:{cls:'tag-exam',label:'📝 Exams'},Events:{cls:'tag-event',label:'🎉 Events'},Placements:{cls:'tag-place',label:'💼 Placements'},Clubs:{cls:'tag-club',label:'🎭 Clubs'},General:{cls:'tag-general',label:'📢 General'}};
+      const tagMap = {
+        Exams: { cls: "tag-exam", label: "📝 Exams" },
+        Events: { cls: "tag-event", label: "🎉 Events" },
+        Placements: { cls: "tag-place", label: "💼 Placements" },
+        Clubs: { cls: "tag-club", label: "🎭 Clubs" },
+        General: { cls: "tag-general", label: "📢 General" },
+      };
 
-function updatePreview() {
-  const title = document.getElementById('fTitle').value || 'Your notice title will appear here…';
-  const cat = document.getElementById('fCat').value || 'General';
-  const author = document.getElementById('fAuthor').value || 'Author';
-  const date = document.getElementById('fDate').value;
-  const desc = document.getElementById('fDesc').value || 'Description preview will update as you type…';
-  const dateStr = date ? new Date(date).toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'}) : 'Date';
-  document.getElementById('pvTitle').textContent = title;
-  document.getElementById('pvDesc').textContent = desc.substring(0, 120) + (desc.length > 120 ? '…' : '');
-  document.getElementById('pvMeta').textContent = `👤 ${author} · 📅 ${dateStr}`;
-  const info = tagMap[cat] || tagMap['General'];
-  const pvTag = document.getElementById('pvTag');
-  pvTag.className = 'pv-tag ' + info.cls;
-  pvTag.textContent = info.label;
-  // title count
-  const t = document.getElementById('fTitle').value.length;
-  document.getElementById('titleCount').textContent = t + ' / 120';
-}
+      function updatePreview() {
+        const title =
+          document.getElementById("fTitle").value ||
+          "Your notice title will appear here…";
+        const cat = document.getElementById("fCat").value || "General";
+        const author = document.getElementById("fAuthor").value || "Author";
+        const date = document.getElementById("fDate").value;
+        const desc =
+          document.getElementById("fDesc").value ||
+          "Description preview will update as you type…";
+        const dateStr = date
+          ? new Date(date).toLocaleDateString("en-US", {
+              month: "short",
+              day: "numeric",
+              year: "numeric",
+            })
+          : "Date";
+        document.getElementById("pvTitle").textContent = title;
+        document.getElementById("pvDesc").textContent =
+          desc.substring(0, 120) + (desc.length > 120 ? "…" : "");
+        document.getElementById("pvMeta").textContent =
+          `👤 ${author} · 📅 ${dateStr}`;
+        const info = tagMap[cat] || tagMap["General"];
+        const pvTag = document.getElementById("pvTag");
+        pvTag.className = "pv-tag " + info.cls;
+        pvTag.textContent = info.label;
+        // title count
+        const t = document.getElementById("fTitle").value.length;
+        document.getElementById("titleCount").textContent = t + " / 120";
+      }
 
-function updateDescCount() {
-  const l = document.getElementById('fDesc').value.length;
-  document.getElementById('descCount').textContent = l + ' / 1000';
-}
+      function updateDescCount() {
+        const l = document.getElementById("fDesc").value.length;
+        document.getElementById("descCount").textContent = l + " / 1000";
+      }
 
-let selectedPriority = 'medium';
-function setPriority(p, el) {
-  selectedPriority = p;
-  document.querySelectorAll('.priority-opt').forEach(o => o.classList.remove('selected'));
-  el.classList.add('selected');
-}
+      let selectedPriority = "medium";
+      function setPriority(p, el) {
+        selectedPriority = p;
+        document
+          .querySelectorAll(".priority-opt")
+          .forEach((o) => o.classList.remove("selected"));
+        el.classList.add("selected");
+      }
 
-function handleFile(input) {
-  const file = input.files[0];
-  if (!file) return;
-  showFilePreview(file);
-}
-function showFilePreview(file) {
-  const isImg = file.type.startsWith('image/');
-  document.getElementById('upIcon').textContent = isImg ? '🖼️' : '📄';
-  document.getElementById('upName').textContent = file.name;
-  document.getElementById('upSize').textContent = (file.size/1024).toFixed(1) + ' KB';
-  document.getElementById('uploadPreview').style.display = 'flex';
-}
-function removeFile() {
-  document.getElementById('fileInput').value = '';
-  document.getElementById('uploadPreview').style.display = 'none';
-}
-function dragOver(e) { e.preventDefault(); document.getElementById('uploadArea').classList.add('drag'); }
-function dragLeave() { document.getElementById('uploadArea').classList.remove('drag'); }
-function dropFile(e) {
-  e.preventDefault(); dragLeave();
-  const file = e.dataTransfer.files[0];
-  if (file) showFilePreview(file);
-}
+      function handleFile(input) {
+        const file = input.files[0];
+        if (!file) return;
+        showFilePreview(file);
+      }
+      function showFilePreview(file) {
+        const isImg = file.type.startsWith("image/");
+        document.getElementById("upIcon").textContent = isImg ? "🖼️" : "📄";
+        document.getElementById("upName").textContent = file.name;
+        document.getElementById("upSize").textContent =
+          (file.size / 1024).toFixed(1) + " KB";
+        document.getElementById("uploadPreview").style.display = "flex";
+      }
+      function removeFile() {
+        document.getElementById("fileInput").value = "";
+        document.getElementById("uploadPreview").style.display = "none";
+      }
+      function dragOver(e) {
+        e.preventDefault();
+        document.getElementById("uploadArea").classList.add("drag");
+      }
+      function dragLeave() {
+        document.getElementById("uploadArea").classList.remove("drag");
+      }
+      function dropFile(e) {
+        e.preventDefault();
+        dragLeave();
+        const file = e.dataTransfer.files[0];
+        if (file) showFilePreview(file);
+      }
 
-function validateForm() {
-  const title = document.getElementById('fTitle').value.trim();
-  const cat = document.getElementById('fCat').value;
-  const desc = document.getElementById('fDesc').value.trim();
-  if (!title) { showToast('⚠️ Please enter a notice title.'); return false; }
-  if (!cat) { showToast('⚠️ Please select a category.'); return false; }
-  if (!desc) { showToast('⚠️ Please add a description.'); return false; }
-  return true;
-}
+      function validateForm() {
+        const title = document.getElementById("fTitle").value.trim();
+        const cat = document.getElementById("fCat").value;
+        const desc = document.getElementById("fDesc").value.trim();
+        if (!title) {
+          showToast("⚠️ Please enter a notice title.");
+          return false;
+        }
+        if (!cat) {
+          showToast("⚠️ Please select a category.");
+          return false;
+        }
+        if (!desc) {
+          showToast("⚠️ Please add a description.");
+          return false;
+        }
+        return true;
+      }
 
-function publishNotice() {
-  if (!validateForm()) return;
-  const tagMapID = {Exams:'tag-exam',Events:'tag-event',Placements:'tag-place',Clubs:'tag-club',General:'tag-general'};
-  const title = document.getElementById('fTitle').value.trim();
-  const cat = document.getElementById('fCat').value;
-  const date = document.getElementById('fDate').value;
-  const author = document.getElementById('fAuthor').value.trim() || 'Admin';
-  const desc = document.getElementById('fDesc').value.trim();
-  const emojiMap = {Exams:'📝',Events:'🎉',Placements:'💼',Clubs:'🎭',General:'📢'};
-  const newNotice = {id:Date.now(),title,category:cat,tag:tagMapID[cat],emoji:emojiMap[cat],date:new Date(date).toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'}),author,desc,hasFile:false};
-  // Store in localStorage for noticeboard
-  const stored = JSON.parse(localStorage.getItem('campusNotices') || '[]');
-  stored.unshift(newNotice);
-  localStorage.setItem('campusNotices', JSON.stringify(stored));
-  showToast('✅ Announcement published successfully!');
-  setTimeout(() => window.location.href = 'admin-dashboard.html', 1500);
-}
+      function publishNotice() {
+        if (!validateForm()) return;
+        const tagMapID = {
+          Exams: "tag-exam",
+          Events: "tag-event",
+          Placements: "tag-place",
+          Clubs: "tag-club",
+          General: "tag-general",
+        };
+        const title = document.getElementById("fTitle").value.trim();
+        const cat = document.getElementById("fCat").value;
+        const date = document.getElementById("fDate").value;
+        const author =
+          document.getElementById("fAuthor").value.trim() || "Admin";
+        const desc = document.getElementById("fDesc").value.trim();
+        const emojiMap = {
+          Exams: "📝",
+          Events: "🎉",
+          Placements: "💼",
+          Clubs: "🎭",
+          General: "📢",
+        };
+        const newNotice = {
+          id: Date.now(),
+          title,
+          category: cat,
+          tag: tagMapID[cat],
+          emoji: emojiMap[cat],
+          date: new Date(date).toLocaleDateString("en-US", {
+            month: "short",
+            day: "numeric",
+            year: "numeric",
+          }),
+          author,
+          desc,
+          hasFile: false,
+        };
+        // Store in localStorage for noticeboard
+        const stored = JSON.parse(
+          localStorage.getItem("campusNotices") || "[]",
+        );
+        stored.unshift(newNotice);
+        localStorage.setItem("campusNotices", JSON.stringify(stored));
+        showToast("✅ Announcement published successfully!");
+        setTimeout(() => (window.location.href = "admin-dashboard.html"), 1500);
+      }
 
-function saveDraft() {
-  if (!document.getElementById('fTitle').value.trim()) { showToast('⚠️ Enter a title to save draft.'); return; }
-  showToast('📝 Draft saved successfully.');
-}
+      function saveDraft() {
+        if (!document.getElementById("fTitle").value.trim()) {
+          showToast("⚠️ Enter a title to save draft.");
+          return;
+        }
+        showToast("📝 Draft saved successfully.");
+      }
 
-function showToast(msg) {
-  const t = document.getElementById('toast');
-  t.textContent = msg;
-  t.classList.add('show');
-  setTimeout(() => t.classList.remove('show'), 3000);
-}
+      function showToast(msg) {
+        const t = document.getElementById("toast");
+        t.textContent = msg;
+        t.classList.add("show");
+        setTimeout(() => t.classList.remove("show"), 3000);
+      }
 
-updatePreview();
-</script>
-</body>
+      updatePreview();
+    </script>
+  </body>
 </html>

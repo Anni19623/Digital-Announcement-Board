@@ -1,301 +1,921 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Campus Notice Hub — Digital Noticeboard</title>
-<link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
-<style>
-  :root {
-    --navy: #0A1628;
-    --blue: #1565C0;
-    --blue-mid: #1976D2;
-    --blue-light: #42A5F5;
-    --cyan: #00BCD4;
-    --cyan-light: #80DEEA;
-    --white: #FFFFFF;
-    --gray-50: #F8FAFC;
-    --gray-100: #EEF2F7;
-    --gray-200: #E2E8F0;
-    --gray-400: #94A3B8;
-    --gray-600: #475569;
-    --gray-800: #1E293B;
-    --gradient-hero: linear-gradient(135deg, #0A1628 0%, #1565C0 50%, #006064 100%);
-    --gradient-card: linear-gradient(145deg, #ffffff, #f0f7ff);
-    --shadow-sm: 0 2px 8px rgba(21,101,192,0.08);
-    --shadow-md: 0 8px 32px rgba(21,101,192,0.14);
-    --shadow-lg: 0 20px 60px rgba(10,22,40,0.18);
-    --radius: 16px;
-    --radius-sm: 10px;
-  }
-  *{margin:0;padding:0;box-sizing:border-box;}
-  html{scroll-behavior:smooth;}
-  body{font-family:'DM Sans',sans-serif;background:var(--gray-50);color:var(--gray-800);overflow-x:hidden;}
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Campus Notice Hub — Digital Noticeboard</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700;800&family=DM+Sans:wght@300;400;500&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        --navy: #0a1628;
+        --blue: #1565c0;
+        --blue-mid: #1976d2;
+        --blue-light: #42a5f5;
+        --cyan: #00bcd4;
+        --cyan-light: #80deea;
+        --white: #ffffff;
+        --gray-50: #f8fafc;
+        --gray-100: #eef2f7;
+        --gray-200: #e2e8f0;
+        --gray-400: #94a3b8;
+        --gray-600: #475569;
+        --gray-800: #1e293b;
+        --gradient-hero: linear-gradient(
+          135deg,
+          #0a1628 0%,
+          #1565c0 50%,
+          #006064 100%
+        );
+        --gradient-card: linear-gradient(145deg, #ffffff, #f0f7ff);
+        --shadow-sm: 0 2px 8px rgba(21, 101, 192, 0.08);
+        --shadow-md: 0 8px 32px rgba(21, 101, 192, 0.14);
+        --shadow-lg: 0 20px 60px rgba(10, 22, 40, 0.18);
+        --radius: 16px;
+        --radius-sm: 10px;
+      }
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      html {
+        scroll-behavior: smooth;
+      }
+      body {
+        font-family: "DM Sans", sans-serif;
+        background: var(--gray-50);
+        color: var(--gray-800);
+        overflow-x: hidden;
+      }
 
-  /* NAV */
-  nav{position:fixed;top:0;left:0;right:0;z-index:100;background:rgba(10,22,40,0.92);backdrop-filter:blur(16px);border-bottom:1px solid rgba(255,255,255,0.07);}
-  .nav-inner{max-width:1200px;margin:0 auto;padding:0 24px;display:flex;align-items:center;justify-content:space-between;height:64px;}
-  .nav-logo{display:flex;align-items:center;gap:10px;text-decoration:none;}
-  .nav-logo-icon{width:36px;height:36px;background:linear-gradient(135deg,var(--cyan),var(--blue-light));border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:18px;}
-  .nav-logo-text{font-family:'Sora',sans-serif;font-weight:700;font-size:18px;color:var(--white);letter-spacing:-0.3px;}
-  .nav-logo-text span{color:var(--cyan);}
-  .nav-links{display:flex;align-items:center;gap:8px;}
-  .nav-links a{color:rgba(255,255,255,0.75);text-decoration:none;font-size:14px;font-weight:500;padding:8px 14px;border-radius:8px;transition:all 0.2s;}
-  .nav-links a:hover{color:#fff;background:rgba(255,255,255,0.1);}
-  .nav-cta{background:linear-gradient(135deg,var(--cyan),var(--blue-light));color:var(--navy)!important;font-weight:700!important;padding:8px 18px!important;border-radius:20px!important;}
-  .nav-cta:hover{transform:translateY(-1px);box-shadow:0 4px 16px rgba(0,188,212,0.35);}
-  .hamburger{display:none;flex-direction:column;gap:5px;cursor:pointer;padding:4px;}
-  .hamburger span{width:24px;height:2px;background:white;border-radius:2px;transition:all 0.3s;}
+      /* NAV */
+      nav {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        z-index: 100;
+        background: rgba(10, 22, 40, 0.92);
+        backdrop-filter: blur(16px);
+        border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+      }
+      .nav-inner {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 0 24px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        height: 64px;
+      }
+      .nav-logo {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        text-decoration: none;
+      }
+      .nav-logo-icon {
+        width: 36px;
+        height: 36px;
+        background: linear-gradient(135deg, var(--cyan), var(--blue-light));
+        border-radius: 10px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 18px;
+      }
+      .nav-logo-text {
+        font-family: "Sora", sans-serif;
+        font-weight: 700;
+        font-size: 18px;
+        color: var(--white);
+        letter-spacing: -0.3px;
+      }
+      .nav-logo-text span {
+        color: var(--cyan);
+      }
+      .nav-links {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+      .nav-links a {
+        color: rgba(255, 255, 255, 0.75);
+        text-decoration: none;
+        font-size: 14px;
+        font-weight: 500;
+        padding: 8px 14px;
+        border-radius: 8px;
+        transition: all 0.2s;
+      }
+      .nav-links a:hover {
+        color: #fff;
+        background: rgba(255, 255, 255, 0.1);
+      }
+      .nav-cta {
+        background: linear-gradient(135deg, var(--cyan), var(--blue-light));
+        color: var(--navy) !important;
+        font-weight: 700 !important;
+        padding: 8px 18px !important;
+        border-radius: 20px !important;
+      }
+      .nav-cta:hover {
+        transform: translateY(-1px);
+        box-shadow: 0 4px 16px rgba(0, 188, 212, 0.35);
+      }
+      .hamburger {
+        display: none;
+        flex-direction: column;
+        gap: 5px;
+        cursor: pointer;
+        padding: 4px;
+      }
+      .hamburger span {
+        width: 24px;
+        height: 2px;
+        background: white;
+        border-radius: 2px;
+        transition: all 0.3s;
+      }
 
-  /* HERO */
-  .hero{min-height:100vh;background:var(--gradient-hero);display:flex;align-items:center;position:relative;overflow:hidden;padding-top:64px;}
-  .hero-bg-shapes{position:absolute;inset:0;overflow:hidden;pointer-events:none;}
-  .shape{position:absolute;border-radius:50%;opacity:0.07;}
-  .shape-1{width:600px;height:600px;background:var(--cyan);top:-200px;right:-100px;animation:float 8s ease-in-out infinite;}
-  .shape-2{width:400px;height:400px;background:var(--blue-light);bottom:-100px;left:-100px;animation:float 10s ease-in-out infinite reverse;}
-  .shape-3{width:200px;height:200px;background:var(--white);top:40%;left:30%;animation:float 6s ease-in-out infinite;}
-  @keyframes float{0%,100%{transform:translateY(0) scale(1);}50%{transform:translateY(-30px) scale(1.04);}}
-  .grid-overlay{position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,0.03) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,0.03) 1px,transparent 1px);background-size:60px 60px;}
-  .hero-inner{max-width:1200px;margin:0 auto;padding:80px 24px;position:relative;z-index:2;display:grid;grid-template-columns:1fr 1fr;gap:60px;align-items:center;}
-  .hero-badge{display:inline-flex;align-items:center;gap:8px;background:rgba(0,188,212,0.15);border:1px solid rgba(0,188,212,0.3);color:var(--cyan-light);padding:6px 14px;border-radius:20px;font-size:12px;font-weight:600;letter-spacing:0.8px;text-transform:uppercase;margin-bottom:24px;}
-  .hero-badge::before{content:'';width:6px;height:6px;background:var(--cyan);border-radius:50%;animation:pulse 2s infinite;}
-  @keyframes pulse{0%,100%{opacity:1;transform:scale(1);}50%{opacity:0.5;transform:scale(1.4);}}
-  .hero-title{font-family:'Sora',sans-serif;font-size:clamp(36px,5vw,60px);font-weight:800;color:var(--white);line-height:1.1;letter-spacing:-1.5px;margin-bottom:20px;}
-  .hero-title span{background:linear-gradient(135deg,var(--cyan),var(--blue-light));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
-  .hero-sub{font-size:17px;color:rgba(255,255,255,0.65);line-height:1.7;margin-bottom:36px;max-width:480px;}
-  .hero-btns{display:flex;gap:14px;flex-wrap:wrap;}
-  .btn-primary{background:linear-gradient(135deg,var(--cyan),#0097A7);color:var(--navy);font-family:'Sora',sans-serif;font-weight:700;font-size:15px;padding:14px 30px;border-radius:30px;text-decoration:none;display:inline-flex;align-items:center;gap:8px;transition:all 0.3s;border:none;cursor:pointer;box-shadow:0 4px 24px rgba(0,188,212,0.3);}
-  .btn-primary:hover{transform:translateY(-2px);box-shadow:0 8px 32px rgba(0,188,212,0.45);}
-  .btn-secondary{background:rgba(255,255,255,0.1);color:var(--white);font-family:'Sora',sans-serif;font-weight:600;font-size:15px;padding:14px 30px;border-radius:30px;text-decoration:none;display:inline-flex;align-items:center;gap:8px;border:1px solid rgba(255,255,255,0.2);transition:all 0.3s;cursor:pointer;}
-  .btn-secondary:hover{background:rgba(255,255,255,0.18);transform:translateY(-2px);}
-  .hero-stats{display:flex;gap:32px;margin-top:40px;}
-  .stat{text-align:left;}
-  .stat-num{font-family:'Sora',sans-serif;font-size:28px;font-weight:800;color:var(--white);}
-  .stat-label{font-size:12px;color:rgba(255,255,255,0.5);text-transform:uppercase;letter-spacing:0.8px;}
-  .hero-visual{display:flex;flex-direction:column;gap:14px;animation:slideUp 0.8s ease 0.2s both;}
-  @keyframes slideUp{from{opacity:0;transform:translateY(30px);}to{opacity:1;transform:translateY(0);}}
-  .notice-preview{background:rgba(255,255,255,0.07);backdrop-filter:blur(10px);border:1px solid rgba(255,255,255,0.12);border-radius:var(--radius);padding:18px 20px;transition:all 0.3s;cursor:pointer;}
-  .notice-preview:hover{background:rgba(255,255,255,0.12);transform:translateX(6px);}
-  .np-tag{display:inline-block;padding:3px 10px;border-radius:20px;font-size:11px;font-weight:700;letter-spacing:0.5px;text-transform:uppercase;margin-bottom:8px;}
-  .tag-exam{background:rgba(255,152,0,0.2);color:#FFB74D;}
-  .tag-event{background:rgba(76,175,80,0.2);color:#81C784;}
-  .tag-place{background:rgba(33,150,243,0.2);color:#64B5F6;}
-  .tag-club{background:rgba(156,39,176,0.2);color:#CE93D8;}
-  .tag-general{background:rgba(0,188,212,0.2);color:#80DEEA;}
-  .np-title{font-family:'Sora',sans-serif;font-size:14px;font-weight:600;color:var(--white);margin-bottom:4px;}
-  .np-meta{font-size:12px;color:rgba(255,255,255,0.45);}
+      /* HERO */
+      .hero {
+        min-height: 100vh;
+        background: var(--gradient-hero);
+        display: flex;
+        align-items: center;
+        position: relative;
+        overflow: hidden;
+        padding-top: 64px;
+      }
+      .hero-bg-shapes {
+        position: absolute;
+        inset: 0;
+        overflow: hidden;
+        pointer-events: none;
+      }
+      .shape {
+        position: absolute;
+        border-radius: 50%;
+        opacity: 0.07;
+      }
+      .shape-1 {
+        width: 600px;
+        height: 600px;
+        background: var(--cyan);
+        top: -200px;
+        right: -100px;
+        animation: float 8s ease-in-out infinite;
+      }
+      .shape-2 {
+        width: 400px;
+        height: 400px;
+        background: var(--blue-light);
+        bottom: -100px;
+        left: -100px;
+        animation: float 10s ease-in-out infinite reverse;
+      }
+      .shape-3 {
+        width: 200px;
+        height: 200px;
+        background: var(--white);
+        top: 40%;
+        left: 30%;
+        animation: float 6s ease-in-out infinite;
+      }
+      @keyframes float {
+        0%,
+        100% {
+          transform: translateY(0) scale(1);
+        }
+        50% {
+          transform: translateY(-30px) scale(1.04);
+        }
+      }
+      .grid-overlay {
+        position: absolute;
+        inset: 0;
+        background-image:
+          linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+          linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+        background-size: 60px 60px;
+      }
+      .hero-inner {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 80px 24px;
+        position: relative;
+        z-index: 2;
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 60px;
+        align-items: center;
+      }
+      .hero-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        background: rgba(0, 188, 212, 0.15);
+        border: 1px solid rgba(0, 188, 212, 0.3);
+        color: var(--cyan-light);
+        padding: 6px 14px;
+        border-radius: 20px;
+        font-size: 12px;
+        font-weight: 600;
+        letter-spacing: 0.8px;
+        text-transform: uppercase;
+        margin-bottom: 24px;
+      }
+      .hero-badge::before {
+        content: "";
+        width: 6px;
+        height: 6px;
+        background: var(--cyan);
+        border-radius: 50%;
+        animation: pulse 2s infinite;
+      }
+      @keyframes pulse {
+        0%,
+        100% {
+          opacity: 1;
+          transform: scale(1);
+        }
+        50% {
+          opacity: 0.5;
+          transform: scale(1.4);
+        }
+      }
+      .hero-title {
+        font-family: "Sora", sans-serif;
+        font-size: clamp(36px, 5vw, 60px);
+        font-weight: 800;
+        color: var(--white);
+        line-height: 1.1;
+        letter-spacing: -1.5px;
+        margin-bottom: 20px;
+      }
+      .hero-title span {
+        background: linear-gradient(135deg, var(--cyan), var(--blue-light));
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+      }
+      .hero-sub {
+        font-size: 17px;
+        color: rgba(255, 255, 255, 0.65);
+        line-height: 1.7;
+        margin-bottom: 36px;
+        max-width: 480px;
+      }
+      .hero-btns {
+        display: flex;
+        gap: 14px;
+        flex-wrap: wrap;
+      }
+      .btn-primary {
+        background: linear-gradient(135deg, var(--cyan), #0097a7);
+        color: var(--navy);
+        font-family: "Sora", sans-serif;
+        font-weight: 700;
+        font-size: 15px;
+        padding: 14px 30px;
+        border-radius: 30px;
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        transition: all 0.3s;
+        border: none;
+        cursor: pointer;
+        box-shadow: 0 4px 24px rgba(0, 188, 212, 0.3);
+      }
+      .btn-primary:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 32px rgba(0, 188, 212, 0.45);
+      }
+      .btn-secondary {
+        background: rgba(255, 255, 255, 0.1);
+        color: var(--white);
+        font-family: "Sora", sans-serif;
+        font-weight: 600;
+        font-size: 15px;
+        padding: 14px 30px;
+        border-radius: 30px;
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        transition: all 0.3s;
+        cursor: pointer;
+      }
+      .btn-secondary:hover {
+        background: rgba(255, 255, 255, 0.18);
+        transform: translateY(-2px);
+      }
+      .hero-stats {
+        display: flex;
+        gap: 32px;
+        margin-top: 40px;
+      }
+      .stat {
+        text-align: left;
+      }
+      .stat-num {
+        font-family: "Sora", sans-serif;
+        font-size: 28px;
+        font-weight: 800;
+        color: var(--white);
+      }
+      .stat-label {
+        font-size: 12px;
+        color: rgba(255, 255, 255, 0.5);
+        text-transform: uppercase;
+        letter-spacing: 0.8px;
+      }
+      .hero-visual {
+        display: flex;
+        flex-direction: column;
+        gap: 14px;
+        animation: slideUp 0.8s ease 0.2s both;
+      }
+      @keyframes slideUp {
+        from {
+          opacity: 0;
+          transform: translateY(30px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+      .notice-preview {
+        background: rgba(255, 255, 255, 0.07);
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(255, 255, 255, 0.12);
+        border-radius: var(--radius);
+        padding: 18px 20px;
+        transition: all 0.3s;
+        cursor: pointer;
+      }
+      .notice-preview:hover {
+        background: rgba(255, 255, 255, 0.12);
+        transform: translateX(6px);
+      }
+      .np-tag {
+        display: inline-block;
+        padding: 3px 10px;
+        border-radius: 20px;
+        font-size: 11px;
+        font-weight: 700;
+        letter-spacing: 0.5px;
+        text-transform: uppercase;
+        margin-bottom: 8px;
+      }
+      .tag-exam {
+        background: rgba(255, 152, 0, 0.2);
+        color: #ffb74d;
+      }
+      .tag-event {
+        background: rgba(76, 175, 80, 0.2);
+        color: #81c784;
+      }
+      .tag-place {
+        background: rgba(33, 150, 243, 0.2);
+        color: #64b5f6;
+      }
+      .tag-club {
+        background: rgba(156, 39, 176, 0.2);
+        color: #ce93d8;
+      }
+      .tag-general {
+        background: rgba(0, 188, 212, 0.2);
+        color: #80deea;
+      }
+      .np-title {
+        font-family: "Sora", sans-serif;
+        font-size: 14px;
+        font-weight: 600;
+        color: var(--white);
+        margin-bottom: 4px;
+      }
+      .np-meta {
+        font-size: 12px;
+        color: rgba(255, 255, 255, 0.45);
+      }
 
-  /* FEATURES */
-  .features{padding:80px 24px;background:var(--white);}
-  .section-inner{max-width:1200px;margin:0 auto;}
-  .section-label{text-align:center;font-size:12px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--cyan);margin-bottom:12px;}
-  .section-title{text-align:center;font-family:'Sora',sans-serif;font-size:clamp(28px,4vw,40px);font-weight:800;color:var(--navy);letter-spacing:-1px;margin-bottom:14px;}
-  .section-sub{text-align:center;font-size:16px;color:var(--gray-600);max-width:520px;margin:0 auto 52px;}
-  .features-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;}
-  .feature-card{background:var(--gradient-card);border:1px solid var(--gray-200);border-radius:var(--radius);padding:28px;transition:all 0.3s;position:relative;overflow:hidden;}
-  .feature-card::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(21,101,192,0.04),rgba(0,188,212,0.04));opacity:0;transition:opacity 0.3s;}
-  .feature-card:hover{transform:translateY(-6px);box-shadow:var(--shadow-md);border-color:var(--cyan-light);}
-  .feature-card:hover::before{opacity:1;}
-  .feature-icon{width:50px;height:50px;background:linear-gradient(135deg,var(--blue),var(--cyan));border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:22px;margin-bottom:16px;box-shadow:0 6px 20px rgba(21,101,192,0.25);}
-  .feature-title{font-family:'Sora',sans-serif;font-size:17px;font-weight:700;color:var(--navy);margin-bottom:8px;}
-  .feature-desc{font-size:14px;color:var(--gray-600);line-height:1.65;}
+      /* FEATURES */
+      .features {
+        padding: 80px 24px;
+        background: var(--white);
+      }
+      .section-inner {
+        max-width: 1200px;
+        margin: 0 auto;
+      }
+      .section-label {
+        text-align: center;
+        font-size: 12px;
+        font-weight: 700;
+        letter-spacing: 1.5px;
+        text-transform: uppercase;
+        color: var(--cyan);
+        margin-bottom: 12px;
+      }
+      .section-title {
+        text-align: center;
+        font-family: "Sora", sans-serif;
+        font-size: clamp(28px, 4vw, 40px);
+        font-weight: 800;
+        color: var(--navy);
+        letter-spacing: -1px;
+        margin-bottom: 14px;
+      }
+      .section-sub {
+        text-align: center;
+        font-size: 16px;
+        color: var(--gray-600);
+        max-width: 520px;
+        margin: 0 auto 52px;
+      }
+      .features-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 24px;
+      }
+      .feature-card {
+        background: var(--gradient-card);
+        border: 1px solid var(--gray-200);
+        border-radius: var(--radius);
+        padding: 28px;
+        transition: all 0.3s;
+        position: relative;
+        overflow: hidden;
+      }
+      .feature-card::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(
+          135deg,
+          rgba(21, 101, 192, 0.04),
+          rgba(0, 188, 212, 0.04)
+        );
+        opacity: 0;
+        transition: opacity 0.3s;
+      }
+      .feature-card:hover {
+        transform: translateY(-6px);
+        box-shadow: var(--shadow-md);
+        border-color: var(--cyan-light);
+      }
+      .feature-card:hover::before {
+        opacity: 1;
+      }
+      .feature-icon {
+        width: 50px;
+        height: 50px;
+        background: linear-gradient(135deg, var(--blue), var(--cyan));
+        border-radius: 14px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 22px;
+        margin-bottom: 16px;
+        box-shadow: 0 6px 20px rgba(21, 101, 192, 0.25);
+      }
+      .feature-title {
+        font-family: "Sora", sans-serif;
+        font-size: 17px;
+        font-weight: 700;
+        color: var(--navy);
+        margin-bottom: 8px;
+      }
+      .feature-desc {
+        font-size: 14px;
+        color: var(--gray-600);
+        line-height: 1.65;
+      }
 
-  /* LATEST NOTICES */
-  .latest{padding:80px 24px;background:var(--gray-50);}
-  .notices-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;}
-  .notice-card{background:var(--white);border:1px solid var(--gray-200);border-radius:var(--radius);padding:22px;transition:all 0.3s;cursor:pointer;display:flex;flex-direction:column;gap:10px;}
-  .notice-card:hover{transform:translateY(-5px);box-shadow:var(--shadow-md);border-color:#42A5F5;}
-  .nc-header{display:flex;justify-content:space-between;align-items:center;}
-  .nc-title{font-family:'Sora',sans-serif;font-size:15px;font-weight:700;color:var(--navy);line-height:1.4;}
-  .nc-date{font-size:12px;color:var(--gray-400);}
-  .nc-desc{font-size:13px;color:var(--gray-600);line-height:1.6;flex:1;}
-  .nc-footer{display:flex;justify-content:space-between;align-items:center;padding-top:8px;border-top:1px solid var(--gray-100);}
-  .nc-read{font-size:12px;font-weight:600;color:var(--blue-mid);text-decoration:none;display:flex;align-items:center;gap:4px;}
-  .nc-read:hover{color:var(--cyan);}
-  .section-action{text-align:center;margin-top:36px;}
+      /* LATEST NOTICES */
+      .latest {
+        padding: 80px 24px;
+        background: var(--gray-50);
+      }
+      .notices-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 20px;
+      }
+      .notice-card {
+        background: var(--white);
+        border: 1px solid var(--gray-200);
+        border-radius: var(--radius);
+        padding: 22px;
+        transition: all 0.3s;
+        cursor: pointer;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+      }
+      .notice-card:hover {
+        transform: translateY(-5px);
+        box-shadow: var(--shadow-md);
+        border-color: #42a5f5;
+      }
+      .nc-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+      .nc-title {
+        font-family: "Sora", sans-serif;
+        font-size: 15px;
+        font-weight: 700;
+        color: var(--navy);
+        line-height: 1.4;
+      }
+      .nc-date {
+        font-size: 12px;
+        color: var(--gray-400);
+      }
+      .nc-desc {
+        font-size: 13px;
+        color: var(--gray-600);
+        line-height: 1.6;
+        flex: 1;
+      }
+      .nc-footer {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding-top: 8px;
+        border-top: 1px solid var(--gray-100);
+      }
+      .nc-read {
+        font-size: 12px;
+        font-weight: 600;
+        color: var(--blue-mid);
+        text-decoration: none;
+        display: flex;
+        align-items: center;
+        gap: 4px;
+      }
+      .nc-read:hover {
+        color: var(--cyan);
+      }
+      .section-action {
+        text-align: center;
+        margin-top: 36px;
+      }
 
-  /* CTA STRIP */
-  .cta-strip{background:var(--gradient-hero);padding:60px 24px;text-align:center;}
-  .cta-strip h2{font-family:'Sora',sans-serif;font-size:clamp(24px,3.5vw,36px);font-weight:800;color:var(--white);letter-spacing:-0.8px;margin-bottom:12px;}
-  .cta-strip p{color:rgba(255,255,255,0.65);font-size:16px;margin-bottom:28px;}
+      /* CTA STRIP */
+      .cta-strip {
+        background: var(--gradient-hero);
+        padding: 60px 24px;
+        text-align: center;
+      }
+      .cta-strip h2 {
+        font-family: "Sora", sans-serif;
+        font-size: clamp(24px, 3.5vw, 36px);
+        font-weight: 800;
+        color: var(--white);
+        letter-spacing: -0.8px;
+        margin-bottom: 12px;
+      }
+      .cta-strip p {
+        color: rgba(255, 255, 255, 0.65);
+        font-size: 16px;
+        margin-bottom: 28px;
+      }
 
-  /* FOOTER */
-  footer{background:var(--navy);padding:40px 24px;text-align:center;}
-  .footer-logo{font-family:'Sora',sans-serif;font-size:20px;font-weight:800;color:var(--white);margin-bottom:12px;}
-  .footer-logo span{color:var(--cyan);}
-  .footer-links{display:flex;justify-content:center;gap:24px;margin-bottom:16px;}
-  .footer-links a{color:rgba(255,255,255,0.5);text-decoration:none;font-size:13px;transition:color 0.2s;}
-  .footer-links a:hover{color:var(--cyan);}
-  .footer-copy{font-size:12px;color:rgba(255,255,255,0.3);}
+      /* FOOTER */
+      footer {
+        background: var(--navy);
+        padding: 40px 24px;
+        text-align: center;
+      }
+      .footer-logo {
+        font-family: "Sora", sans-serif;
+        font-size: 20px;
+        font-weight: 800;
+        color: var(--white);
+        margin-bottom: 12px;
+      }
+      .footer-logo span {
+        color: var(--cyan);
+      }
+      .footer-links {
+        display: flex;
+        justify-content: center;
+        gap: 24px;
+        margin-bottom: 16px;
+      }
+      .footer-links a {
+        color: rgba(255, 255, 255, 0.5);
+        text-decoration: none;
+        font-size: 13px;
+        transition: color 0.2s;
+      }
+      .footer-links a:hover {
+        color: var(--cyan);
+      }
+      .footer-copy {
+        font-size: 12px;
+        color: rgba(255, 255, 255, 0.3);
+      }
 
-  @media(max-width:900px){
-    .hero-inner{grid-template-columns:1fr;}
-    .hero-visual{display:none;}
-    .features-grid{grid-template-columns:1fr 1fr;}
-    .notices-grid{grid-template-columns:1fr 1fr;}
-  }
-  @media(max-width:600px){
-    .features-grid,.notices-grid{grid-template-columns:1fr;}
-    .hero-stats{gap:20px;}
-    .nav-links{display:none;}
-    .hamburger{display:flex;}
-  }
-</style>
-</head>
-<body>
-
-<nav>
-  <div class="nav-inner">
-    <a href="index.html" class="nav-logo">
-      <div class="nav-logo-icon">📋</div>
-      <div class="nav-logo-text">Campus<span>Hub</span></div>
-    </a>
-    <div class="nav-links">
-      <a href="index.html">Home</a>
-      <a href="noticeboard.html">Notices</a>
-      <a href="#features">Features</a>
-      <a href="admin-login.html" class="nav-cta">Admin Login</a>
-    </div>
-    <div class="hamburger" onclick="toggleMenu(this)">
-      <span></span><span></span><span></span>
-    </div>
-  </div>
-</nav>
-
-<!-- HERO -->
-<section class="hero">
-  <div class="hero-bg-shapes">
-    <div class="shape shape-1"></div>
-    <div class="shape shape-2"></div>
-    <div class="shape shape-3"></div>
-    <div class="grid-overlay"></div>
-  </div>
-  <div class="hero-inner">
-    <div style="animation: slideUp 0.7s ease both;">
-      <div class="hero-badge">🎓 Your Campus, Digitally Connected</div>
-      <h1 class="hero-title">One Place for All <span>Campus Notices</span></h1>
-      <p class="hero-sub">Stay updated with exams, events, placements, and club activities. Campus Notice Hub is your digital noticeboard — always current, always accessible.</p>
-      <div class="hero-btns">
-        <a href="noticeboard.html" class="btn-primary">View Notices →</a>
-        <a href="admin-login.html" class="btn-secondary">🔐 Admin Panel</a>
+      @media (max-width: 900px) {
+        .hero-inner {
+          grid-template-columns: 1fr;
+        }
+        .hero-visual {
+          display: none;
+        }
+        .features-grid {
+          grid-template-columns: 1fr 1fr;
+        }
+        .notices-grid {
+          grid-template-columns: 1fr 1fr;
+        }
+      }
+      @media (max-width: 600px) {
+        .features-grid,
+        .notices-grid {
+          grid-template-columns: 1fr;
+        }
+        .hero-stats {
+          gap: 20px;
+        }
+        .nav-links {
+          display: none;
+        }
+        .hamburger {
+          display: flex;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <nav>
+      <div class="nav-inner">
+        <a href="index.html" class="nav-logo">
+          <div class="nav-logo-icon">📋</div>
+          <div class="nav-logo-text">Campus<span>Hub</span></div>
+        </a>
+        <div class="nav-links">
+          <a href="index.html">Home</a>
+          <a href="noticeboard.html">Notices</a>
+          <a href="#features">Features</a>
+          <a href="admin-login.html" class="nav-cta">Admin Login</a>
+        </div>
+        <div class="hamburger" onclick="toggleMenu(this)">
+          <span></span><span></span><span></span>
+        </div>
       </div>
-      <div class="hero-stats">
-        <div class="stat"><div class="stat-num">128+</div><div class="stat-label">Active Notices</div></div>
-        <div class="stat"><div class="stat-num">5</div><div class="stat-label">Categories</div></div>
-        <div class="stat"><div class="stat-num">3.2K</div><div class="stat-label">Students Reached</div></div>
-      </div>
-    </div>
-    <div class="hero-visual">
-      <div class="notice-preview">
-        <div class="np-tag tag-exam">📝 Exams</div>
-        <div class="np-title">Mid-Semester Examination Schedule 2025</div>
-        <div class="np-meta">📅 May 28, 2025 · Controller of Examinations</div>
-      </div>
-      <div class="notice-preview">
-        <div class="np-tag tag-place">💼 Placements</div>
-        <div class="np-title">Infosys Campus Drive — CSE & IT Eligible</div>
-        <div class="np-meta">📅 May 25, 2025 · Training & Placement Cell</div>
-      </div>
-      <div class="notice-preview">
-        <div class="np-tag tag-event">🎉 Events</div>
-        <div class="np-title">Annual Tech Fest "Nexus 2025" Registration Open</div>
-        <div class="np-meta">📅 May 22, 2025 · Student Affairs</div>
-      </div>
-      <div class="notice-preview">
-        <div class="np-tag tag-club">🎭 Clubs</div>
-        <div class="np-title">Photography Club — New Members Wanted</div>
-        <div class="np-meta">📅 May 20, 2025 · Arts & Culture Committee</div>
-      </div>
-    </div>
-  </div>
-</section>
+    </nav>
 
-<!-- FEATURES -->
-<section class="features" id="features">
-  <div class="section-inner">
-    <div class="section-label">Why Campus Hub?</div>
-    <h2 class="section-title">Everything You Need to Stay Informed</h2>
-    <p class="section-sub">A clean, organized space for every notice your college publishes — no more missing important updates.</p>
-    <div class="features-grid">
-      <div class="feature-card">
-        <div class="feature-icon">⚡</div>
-        <div class="feature-title">Instant Announcements</div>
-        <div class="feature-desc">Admins can publish notices instantly. Students see updates the moment they're posted, no delay.</div>
+    <!-- HERO -->
+    <section class="hero">
+      <div class="hero-bg-shapes">
+        <div class="shape shape-1"></div>
+        <div class="shape shape-2"></div>
+        <div class="shape shape-3"></div>
+        <div class="grid-overlay"></div>
       </div>
-      <div class="feature-card">
-        <div class="feature-icon">🗂️</div>
-        <div class="feature-title">Smart Categories</div>
-        <div class="feature-desc">Browse by Exams, Events, Placements, Clubs, or General — find exactly what matters to you.</div>
+      <div class="hero-inner">
+        <div style="animation: slideUp 0.7s ease both">
+          <div class="hero-badge">🎓 Your Campus, Digitally Connected</div>
+          <h1 class="hero-title">
+            One Place for All <span>Campus Notices</span>
+          </h1>
+          <p class="hero-sub">
+            Stay updated with exams, events, placements, and club activities.
+            Campus Notice Hub is your digital noticeboard — always current,
+            always accessible.
+          </p>
+          <div class="hero-btns">
+            <a href="noticeboard.html" class="btn-primary">View Notices →</a>
+            <a href="admin-login.html" class="btn-secondary">🔐 Admin Panel</a>
+          </div>
+          <div class="hero-stats">
+            <div class="stat">
+              <div class="stat-num">128+</div>
+              <div class="stat-label">Active Notices</div>
+            </div>
+            <div class="stat">
+              <div class="stat-num">5</div>
+              <div class="stat-label">Categories</div>
+            </div>
+            <div class="stat">
+              <div class="stat-num">3.2K</div>
+              <div class="stat-label">Students Reached</div>
+            </div>
+          </div>
+        </div>
+        <div class="hero-visual">
+          <div class="notice-preview">
+            <div class="np-tag tag-exam">📝 Exams</div>
+            <div class="np-title">Mid-Semester Examination Schedule 2025</div>
+            <div class="np-meta">
+              📅 May 28, 2025 · Controller of Examinations
+            </div>
+          </div>
+          <div class="notice-preview">
+            <div class="np-tag tag-place">💼 Placements</div>
+            <div class="np-title">Infosys Campus Drive — CSE & IT Eligible</div>
+            <div class="np-meta">
+              📅 May 25, 2025 · Training & Placement Cell
+            </div>
+          </div>
+          <div class="notice-preview">
+            <div class="np-tag tag-event">🎉 Events</div>
+            <div class="np-title">
+              Annual Tech Fest "Nexus 2025" Registration Open
+            </div>
+            <div class="np-meta">📅 May 22, 2025 · Student Affairs</div>
+          </div>
+          <div class="notice-preview">
+            <div class="np-tag tag-club">🎭 Clubs</div>
+            <div class="np-title">Photography Club — New Members Wanted</div>
+            <div class="np-meta">
+              📅 May 20, 2025 · Arts & Culture Committee
+            </div>
+          </div>
+        </div>
       </div>
-      <div class="feature-card">
-        <div class="feature-icon">🔍</div>
-        <div class="feature-title">Quick Search</div>
-        <div class="feature-desc">Search notices by keyword, date, or category. Find any announcement in seconds.</div>
-      </div>
-      <div class="feature-card">
-        <div class="feature-icon">📱</div>
-        <div class="feature-title">Mobile First</div>
-        <div class="feature-desc">Fully responsive on all devices. Check notices from your phone, tablet, or laptop seamlessly.</div>
-      </div>
-      <div class="feature-card">
-        <div class="feature-icon">🛡️</div>
-        <div class="feature-title">Admin Dashboard</div>
-        <div class="feature-desc">A powerful yet simple admin panel to create, edit, and manage all campus announcements.</div>
-      </div>
-      <div class="feature-card">
-        <div class="feature-icon">📎</div>
-        <div class="feature-title">File Attachments</div>
-        <div class="feature-desc">Attach PDFs, images, or documents to any notice so students get complete information.</div>
-      </div>
-    </div>
-  </div>
-</section>
+    </section>
 
-<!-- LATEST NOTICES -->
-<section class="latest">
-  <div class="section-inner">
-    <div class="section-label">Fresh Updates</div>
-    <h2 class="section-title">Latest Notices</h2>
-    <p class="section-sub">Showing the most recent announcements from all categories.</p>
-    <div class="notices-grid" id="latestNotices"></div>
-    <div class="section-action">
-      <a href="noticeboard.html" class="btn-primary">View All Notices →</a>
-    </div>
-  </div>
-</section>
+    <!-- FEATURES -->
+    <section class="features" id="features">
+      <div class="section-inner">
+        <div class="section-label">Why Campus Hub?</div>
+        <h2 class="section-title">Everything You Need to Stay Informed</h2>
+        <p class="section-sub">
+          A clean, organized space for every notice your college publishes — no
+          more missing important updates.
+        </p>
+        <div class="features-grid">
+          <div class="feature-card">
+            <div class="feature-icon">⚡</div>
+            <div class="feature-title">Instant Announcements</div>
+            <div class="feature-desc">
+              Admins can publish notices instantly. Students see updates the
+              moment they're posted, no delay.
+            </div>
+          </div>
+          <div class="feature-card">
+            <div class="feature-icon">🗂️</div>
+            <div class="feature-title">Smart Categories</div>
+            <div class="feature-desc">
+              Browse by Exams, Events, Placements, Clubs, or General — find
+              exactly what matters to you.
+            </div>
+          </div>
+          <div class="feature-card">
+            <div class="feature-icon">🔍</div>
+            <div class="feature-title">Quick Search</div>
+            <div class="feature-desc">
+              Search notices by keyword, date, or category. Find any
+              announcement in seconds.
+            </div>
+          </div>
+          <div class="feature-card">
+            <div class="feature-icon">📱</div>
+            <div class="feature-title">Mobile First</div>
+            <div class="feature-desc">
+              Fully responsive on all devices. Check notices from your phone,
+              tablet, or laptop seamlessly.
+            </div>
+          </div>
+          <div class="feature-card">
+            <div class="feature-icon">🛡️</div>
+            <div class="feature-title">Admin Dashboard</div>
+            <div class="feature-desc">
+              A powerful yet simple admin panel to create, edit, and manage all
+              campus announcements.
+            </div>
+          </div>
+          <div class="feature-card">
+            <div class="feature-icon">📎</div>
+            <div class="feature-title">File Attachments</div>
+            <div class="feature-desc">
+              Attach PDFs, images, or documents to any notice so students get
+              complete information.
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
 
-<!-- CTA STRIP -->
-<section class="cta-strip">
-  <h2>Are You a Faculty or Admin?</h2>
-  <p>Post and manage all campus announcements from one clean dashboard.</p>
-  <a href="admin-login.html" class="btn-primary">Go to Admin Panel →</a>
-</section>
+    <!-- LATEST NOTICES -->
+    <section class="latest">
+      <div class="section-inner">
+        <div class="section-label">Fresh Updates</div>
+        <h2 class="section-title">Latest Notices</h2>
+        <p class="section-sub">
+          Showing the most recent announcements from all categories.
+        </p>
+        <div class="notices-grid" id="latestNotices"></div>
+        <div class="section-action">
+          <a href="noticeboard.html" class="btn-primary">View All Notices →</a>
+        </div>
+      </div>
+    </section>
 
-<!-- FOOTER -->
-<footer>
-  <div class="footer-logo">Campus<span>Hub</span></div>
-  <div class="footer-links">
-    <a href="index.html">Home</a>
-    <a href="noticeboard.html">Notices</a>
-    <a href="admin-login.html">Admin</a>
-  </div>
-  <div class="footer-copy">© 2025 Campus Notice Hub — College Mini Project</div>
-</footer>
+    <!-- CTA STRIP -->
+    <section class="cta-strip">
+      <h2>Are You a Faculty or Admin?</h2>
+      <p>Post and manage all campus announcements from one clean dashboard.</p>
+      <a href="admin-login.html" class="btn-primary">Go to Admin Panel →</a>
+    </section>
 
-<script>
-const NOTICES = [
-  {id:1,title:"Mid-Semester Exam Schedule Released",date:"May 28, 2025",category:"Exams",tag:"tag-exam",emoji:"📝",desc:"The controller of examinations has released the complete mid-semester timetable for all departments. Download from the examination portal.",author:"Controller of Examinations"},
-  {id:2,title:"Infosys Campus Recruitment Drive",date:"May 25, 2025",category:"Placements",tag:"tag-place",emoji:"💼",desc:"Infosys is visiting campus for System Engineer roles. CSE, IT, and ECE final year students with 60%+ aggregate are eligible.",author:"T&P Cell"},
-  {id:3,title:"Annual Tech Fest 'Nexus 2025'",date:"May 22, 2025",category:"Events",tag:"tag-event",emoji:"🎉",desc:"Registrations are open for the annual tech festival. Hackathon, paper presentations, and robotics events await. Register before June 5.",author:"Student Affairs"},
-  {id:4,title:"Photography Club Open Auditions",date:"May 20, 2025",category:"Clubs",tag:"tag-club",emoji:"🎭",desc:"The Photography Club invites passionate shutterbugs to join. No prior experience needed. Audition with a portfolio of 5 photos.",author:"Cultural Committee"},
-  {id:5,title:"Library Holiday Notice",date:"May 18, 2025",category:"General",tag:"tag-general",emoji:"📢",desc:"The central library will remain closed on May 31st (Saturday) due to maintenance. Digital resources remain accessible 24/7.",author:"Library Administration"},
-  {id:6,title:"GATE 2026 Workshop Registration",date:"May 16, 2025",category:"Exams",tag:"tag-exam",emoji:"📝",desc:"A 3-day intensive GATE preparation workshop is scheduled for June 10-12. Pre-final and final year students can register at the academic office.",author:"Academic Cell"},
-];
+    <!-- FOOTER -->
+    <footer>
+      <div class="footer-logo">Campus<span>Hub</span></div>
+      <div class="footer-links">
+        <a href="index.html">Home</a>
+        <a href="noticeboard.html">Notices</a>
+        <a href="admin-login.html">Admin</a>
+      </div>
+      <div class="footer-copy">
+        © 2025 Campus Notice Hub — College Mini Project
+      </div>
+    </footer>
 
-function renderLatest() {
-  const container = document.getElementById('latestNotices');
-  const latest = NOTICES.slice(0, 6);
-  container.innerHTML = latest.map(n => `
+    <script>
+      const NOTICES = [
+        {
+          id: 1,
+          title: "Mid-Semester Exam Schedule Released",
+          date: "May 28, 2025",
+          category: "Exams",
+          tag: "tag-exam",
+          emoji: "📝",
+          desc: "The controller of examinations has released the complete mid-semester timetable for all departments. Download from the examination portal.",
+          author: "Controller of Examinations",
+        },
+        {
+          id: 2,
+          title: "Infosys Campus Recruitment Drive",
+          date: "May 25, 2025",
+          category: "Placements",
+          tag: "tag-place",
+          emoji: "💼",
+          desc: "Infosys is visiting campus for System Engineer roles. CSE, IT, and ECE final year students with 60%+ aggregate are eligible.",
+          author: "T&P Cell",
+        },
+        {
+          id: 3,
+          title: "Annual Tech Fest 'Nexus 2025'",
+          date: "May 22, 2025",
+          category: "Events",
+          tag: "tag-event",
+          emoji: "🎉",
+          desc: "Registrations are open for the annual tech festival. Hackathon, paper presentations, and robotics events await. Register before June 5.",
+          author: "Student Affairs",
+        },
+        {
+          id: 4,
+          title: "Photography Club Open Auditions",
+          date: "May 20, 2025",
+          category: "Clubs",
+          tag: "tag-club",
+          emoji: "🎭",
+          desc: "The Photography Club invites passionate shutterbugs to join. No prior experience needed. Audition with a portfolio of 5 photos.",
+          author: "Cultural Committee",
+        },
+        {
+          id: 5,
+          title: "Library Holiday Notice",
+          date: "May 18, 2025",
+          category: "General",
+          tag: "tag-general",
+          emoji: "📢",
+          desc: "The central library will remain closed on May 31st (Saturday) due to maintenance. Digital resources remain accessible 24/7.",
+          author: "Library Administration",
+        },
+        {
+          id: 6,
+          title: "GATE 2026 Workshop Registration",
+          date: "May 16, 2025",
+          category: "Exams",
+          tag: "tag-exam",
+          emoji: "📝",
+          desc: "A 3-day intensive GATE preparation workshop is scheduled for June 10-12. Pre-final and final year students can register at the academic office.",
+          author: "Academic Cell",
+        },
+      ];
+
+      function renderLatest() {
+        const container = document.getElementById("latestNotices");
+        const latest = NOTICES.slice(0, 6);
+        container.innerHTML = latest
+          .map(
+            (n) => `
     <div class="notice-card" onclick="window.location.href='noticeboard.html'">
       <div class="nc-header">
         <span class="np-tag ${n.tag}">${n.emoji} ${n.category}</span>
@@ -308,28 +928,36 @@ function renderLatest() {
         <a class="nc-read" href="noticeboard.html">Read more →</a>
       </div>
     </div>
-  `).join('');
-}
+  `,
+          )
+          .join("");
+      }
 
-function toggleMenu(el) {
-  el.classList.toggle('open');
-}
+      function toggleMenu(el) {
+        el.classList.toggle("open");
+      }
 
-renderLatest();
+      renderLatest();
 
-// Animate on scroll
-const observer = new IntersectionObserver(entries => {
-  entries.forEach(e => { if(e.isIntersecting) e.target.classList.add('visible'); });
-}, {threshold: 0.1});
-document.querySelectorAll('.feature-card, .notice-card').forEach(el => {
-  el.style.opacity = '0';
-  el.style.transform = 'translateY(20px)';
-  el.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
-  observer.observe(el);
-});
-const styleEl = document.createElement('style');
-styleEl.textContent = '.visible{opacity:1!important;transform:translateY(0)!important;}';
-document.head.appendChild(styleEl);
-</script>
-</body>
+      // Animate on scroll
+      const observer = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((e) => {
+            if (e.isIntersecting) e.target.classList.add("visible");
+          });
+        },
+        { threshold: 0.1 },
+      );
+      document.querySelectorAll(".feature-card, .notice-card").forEach((el) => {
+        el.style.opacity = "0";
+        el.style.transform = "translateY(20px)";
+        el.style.transition = "opacity 0.5s ease, transform 0.5s ease";
+        observer.observe(el);
+      });
+      const styleEl = document.createElement("style");
+      styleEl.textContent =
+        ".visible{opacity:1!important;transform:translateY(0)!important;}";
+      document.head.appendChild(styleEl);
+    </script>
+  </body>
 </html>
